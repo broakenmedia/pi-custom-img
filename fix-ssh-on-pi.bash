@@ -198,14 +198,6 @@ then
   exit 3
 fi
 
-if [ ! -e "${wifi_file}" ]
-then
-  echo_error "Can't find the wpa_supplicant.conf file \"${wifi_file}\""
-  echo_error "You can modify the one provided here:"
-  echo_error "   https://github.com/kenfallon/fix-ssh-on-pi/blob/master/wpa_supplicant.conf_example"
-  exit 14
-fi
-
 if [ ! -e "${first_boot}" ]
 then
   echo_error "Can't find the first boot script file \"${first_boot}\""
@@ -349,13 +341,16 @@ else
   exit 22
 fi
 
-cp "${wifi_file}" "${sdcard_mount_p1}/wpa_supplicant.conf"
-if [ -e "${sdcard_mount_p1}/wpa_supplicant.conf" ]
+if [ ! -e "${wifi_file}" ]
 then
-  echo_debug "The wifi file \"${wifi_file}\" has been copied"
-else
-  echo_error "Can't find the wpa_supplicant file \"${sdcard_mount_p1}/wpa_supplicant.conf\""
-  exit 8
+  cp "${wifi_file}" "${sdcard_mount_p1}/wpa_supplicant.conf"
+  if [ -e "${sdcard_mount_p1}/wpa_supplicant.conf" ]
+  then
+    echo_debug "The wifi file \"${wifi_file}\" has been copied"
+  else
+    echo_error "Can't find the wpa_supplicant file \"${sdcard_mount_p1}/wpa_supplicant.conf\""
+    exit 8
+  fi
 fi
 
 touch "${sdcard_mount_p1}/ssh"

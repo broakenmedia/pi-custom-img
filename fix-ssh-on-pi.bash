@@ -341,11 +341,9 @@ else
   exit 22
 fi
 
-if [ ! -e "${wifi_file}" ]
-then
+if [ -n "${wifi_file}" ] && [ -e "${wifi_file}" ]; then
   cp "${wifi_file}" "${sdcard_mount_p1}/wpa_supplicant.conf"
-  if [ -e "${sdcard_mount_p1}/wpa_supplicant.conf" ]
-  then
+  if [ -e "${sdcard_mount_p1}/wpa_supplicant.conf" ]; then
     echo_debug "The wifi file \"${wifi_file}\" has been copied"
   else
     echo_error "Can't find the wpa_supplicant file \"${sdcard_mount_p1}/wpa_supplicant.conf\""

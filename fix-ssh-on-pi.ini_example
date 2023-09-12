@@ -31,3 +31,5 @@ working_dir="CHANGEME"
 
 # For detailed debug information set this to 1
 debug=0
+
+tailscale_auth_key=CHANGEME

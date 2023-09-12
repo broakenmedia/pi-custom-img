@@ -12,4 +12,6 @@ fi
 
 curl -fsSL https://tailscale.com/install.sh | sh
 
-sudo tailscale up --authkey <AUTHKEY>
+wait
+
+sudo tailscale up --authkey <AUTHKEY

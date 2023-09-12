@@ -14,4 +14,8 @@ curl -fsSL https://tailscale.com/install.sh | sh
 
 wait
 
-sudo tailscale up --authkey <AUTHKEY
+sudo hostnamectl set-hostname "${macadd}"
+
+sudo tailscale up --authkey <AUTHKEY>
+
+/sbin/shutdown -r 1 "reboot in 1 minute"

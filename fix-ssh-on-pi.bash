@@ -145,6 +145,7 @@ variables=(
   root_password_hash
   wifi_file
   working_dir
+  tailscale_auth_key
 )
 
 for variable in "${variables[@]}"
@@ -362,14 +363,26 @@ fi
 
 if [ -e "${first_boot}" ]
 then
-  cp "${first_boot}" "${sdcard_mount_p1}/firstboot.sh"
+  # Create a temporary file for the modified content
+  temp_file=$(mktemp)
+
+  # Use sed to replace '<AUTHKEY>' with the value of 'tailscale_auth_key' and save it to the temporary file
+  sed "s/<AUTHKEY>/${tailscale_auth_key}/g" "${first_boot}" > "${temp_file}"
+
+  # Copy the modified file to "${sdcard_mount_p1}/firstboot.sh"
+  cp "${temp_file}" "${sdcard_mount_p1}/firstboot.sh"
+
+  # Check if the file was successfully copied
   if [ -e "${sdcard_mount_p1}/firstboot.sh" ]
   then
-    echo_debug "The first boot script been copied"
+    echo_debug "The first boot script has been copied"
   else
     echo_error "Can't find the first boot script file \"${sdcard_mount_p1}/firstboot.sh\""
     exit 19
   fi
+
+  # Remove the temporary file
+  rm "${temp_file}"
 fi
 
 umount_sdcard "${sdcard_mount_p1}"
